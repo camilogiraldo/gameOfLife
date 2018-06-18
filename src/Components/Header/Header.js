@@ -8,7 +8,7 @@ const Header = styled.div`
     text-align: center
 `
 
-const header =  (props) => {
+const header = (props) => {
   return (
     <Header>
       <Button primary buttonClicked={props.playClick}> Play Game </Button>

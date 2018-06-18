@@ -9,7 +9,7 @@ const StyledGrid = styled.div`
   width: 800px
 `
 const styledGrid = (props) => {
-    return <StyledGrid> {props.children} </StyledGrid>
+  return <StyledGrid> {props.children} </StyledGrid>
 }
 
 export default styledGrid

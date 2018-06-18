@@ -1,3 +1,5 @@
+[//]: <> (//# Replace readme with your dev notes)
+[//]: <> (//# There are tons of missing semicollons ;)
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 

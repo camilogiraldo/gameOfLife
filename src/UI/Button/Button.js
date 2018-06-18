@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 
+
 const Button = styled.button`
   background: white;
   color: black;
@@ -14,7 +15,7 @@ const Button = styled.button`
 
 const button = (props) => {
   return (
-   <Button onClick={props.buttonClicked}>{props.children}</Button>
+    <Button onClick={props.buttonClicked}>{props.children}</Button>
   )
 }
 

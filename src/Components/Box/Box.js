@@ -1,4 +1,7 @@
 import React from 'react'
+
+//# For a such small project, would make more sense to have css
+//# instead of adding dependencies
 import styled from 'styled-components'
 
 const Box = styled.div`
@@ -15,13 +18,13 @@ const Box = styled.div`
 `
 
 const box = (props) => {
-  return  <Box 
-     id={props.boxId}
-     style={ props.boxClass === "on" ? {backgroundColor: "black"} : {}}
-     onClick={() => props.selectBox(props.row, props.col)}> 
-     {props.children} 
+  return <Box
+    id={props.boxId}
+    style={props.boxClass === "on" ? { backgroundColor: "black" } : {}}
+    onClick={() => props.selectBox(props.row, props.col)}>
+    {props.children}
   </Box>
-    
+
 }
 
 export default box;
