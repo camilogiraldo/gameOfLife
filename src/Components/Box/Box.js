@@ -1,8 +1,5 @@
-import React from 'react'
-
-//# For a such small project, would make more sense to have css
-//# instead of adding dependencies
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const Box = styled.div`
     display: inline-block;
@@ -23,8 +20,7 @@ const box = (props) => {
     style={props.boxClass === "on" ? { backgroundColor: "black" } : {}}
     onClick={() => props.selectBox(props.row, props.col)}>
     {props.children}
-  </Box>
-
-}
+    </Box>
+};
 
 export default box;
