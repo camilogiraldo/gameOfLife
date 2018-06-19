@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const StyledGrid = styled.div`
   line-height: 0;
@@ -12,4 +12,4 @@ const styledGrid = (props) => {
   return <StyledGrid> {props.children} </StyledGrid>
 }
 
-export default styledGrid
+export default styledGrid;
