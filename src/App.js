@@ -1,85 +1,107 @@
 import React, { Component } from 'react';
 import Grid from './Containers/Grid/Grid';
-import arrayClone from './_helpers/arrayClone'
-import Header from './Components/Header/Header'
+import arrayClone from './_helpers/arrayClone';
+import Header from './Components/Header/Header';
 
 class App extends Component {
-  //# Try avoid the use of the constructor
   rows = 50;
   cols = 50;
 
   state = {
-    fullGrid: Array(this.rows)
-      .fill()
-      .map((() => Array(this.cols).fill(false)))
-  }
+        fullGrid: Array(this.rows)
+        .fill()
+        .map((() => Array(this.cols).fill(false)))
+     };
 
-  // constructor() {
-  //   super();
-  //   this.rows = 50;
-  //   this.cols = 50;
+  componentDidMount = () => {
+    const initialSeed = [[0,0], [0,1], [1,0], [1,3], [2,1], [2,2]];
+    const gridCopy = arrayClone(this.state.fullGrid);
+    
+    initialSeed.forEach(coord => {
+      let i = coord[0]
+      let j = coord[1]
+      gridCopy[i][j] = true
+    });
 
-  //   this.state = {
-  //     fullGrid: Array(this.rows).fill().map((() => Array(this.cols).fill(false)))
-  //   }
-  // }
-
-  //# The grid should always start with the given active boxes
-  //# this is meant to check your use of react lifecycle
-
-  clickHandler = (row, col) => {
-    //# Since you are not reassigning the full value, you can use const here
-    let gridCopy = arrayClone(this.state.fullGrid)
-    gridCopy[row][col] = !gridCopy[row][col]
     this.setState({
       fullGrid: gridCopy
-    })
+    });
+  }
+  
+
+  clickHandler = (row, col) => {
+    const gridCopy = arrayClone(this.state.fullGrid);
+    gridCopy[row][col] = !gridCopy[row][col];
+
+    this.setState({
+      fullGrid: gridCopy
+    });
   }
 
   playGame = () => {
-    clearInterval(this.interval)
-    this.interval = setInterval(this.play, 1000)
+    clearInterval(this.interval);
+    this.interval = setInterval(this.play, 1000);
   }
 
   play = () => {
-    //# Maybe some destructuring?
     let { fullGrid } = this.state;
-    // let grid1 = this.state.fullGrid;
-    let grid2 = arrayClone(this.state.fullGrid)
-
+    let newGrid = arrayClone(this.state.fullGrid);
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
         let count = 0;
-        //# Overcomplex, impossible to read
-        //# There should be two process, reading neighbors and setting dead/alive
-        //# Cells will only live with 2 or 3 neighbors, nothing else
-        if (i > 0) if (grid1[i - 1][j]) count++;
-        if (i > 0 && j > 0) if (grid1[i - 1][j - 1]) count++;
-        if (i > 0 && j < this.cols - 1) if (grid1[i - 1][j + 1]) count++;
-        if (j < this.cols - 1) if (grid1[i][j + 1]) count++;
-        if (j > 0) if (grid1[i][j - 1]) count++;
-        if (i < this.rows - 1) if (grid1[i + 1][j]) count++;
-        if (i < this.rows - 1 && j > 0) if (grid1[i + 1][j - 1]) count++;
-        if (i < this.rows - 1 && j < this.cols - 1) if (grid1[i + 1][j + 1]) count++;
-        if (grid1[i][j] && (count < 2 || count > 3)) grid2[i][j] = false;
-        if (!grid1[i][j] && count === 3) grid2[i][j] = true;
+        count = this.getLiveNeighborCount(i, j, fullGrid);
+        
+        if (fullGrid[i][j] && (count < 2 || count > 3)) newGrid[i][j] = false;
+        if (!fullGrid[i][j] && count === 3) newGrid[i][j] = true;
+
       }
     }
+    
+    let stopFlag = true;
 
-    //# In the destructuring way
-    this.setState({ fullGrid })
-    // this.setState({
-    //   fullGrid: grid2
-    // })
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) { 
+        if (this.state.fullGrid[i][j] !== newGrid[i][j]) {
+          stopFlag = false;
+        };
+      };
+    };
+
+    if (stopFlag) {
+      this.stopGame();
+    }
+  
+    this.setState({ fullGrid: newGrid });
   }
 
-  pauseGame = () => {
-    clearInterval(this.interval)
+  getLiveNeighborCount = (row, col, board) => {
+    let lnc = 0;
+    for (let rI = row - 1; rI <= row + 1; rI += 1) {
+      for (let cI = col - 1; cI <= col + 1; cI += 1) {
+        if (
+          (rI !== row || cI !== col) &&
+          rI >= 0 &&
+          rI < board.length &&
+          board[rI][cI]
+        ) {
+          lnc += 1;
+        };
+      };
+    };
+    return lnc;
+  };
+
+  stepForward = () => {
+    this.play();
+  }
+
+  stopGame = () => {
+    clearInterval(this.interval);
   }
 
   seedGame = () => {
-    //# Since you are not reassigning the full value, you can use const here
-    let gridCopy = arrayClone(this.state.fullGrid)
+    const gridCopy = arrayClone(this.state.fullGrid);
+
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
         //seed randomly
@@ -91,17 +113,17 @@ class App extends Component {
 
     this.setState({
       fullGrid: gridCopy
-    })
+    });
   }
 
   render() {
     return (
       <div>
-        {/*//# Multi properties components look better in multiline :)*/}
         <Header
           playClick={this.playGame}
           seedClick={this.seedGame}
-          pauseClick={this.pauseGame} />
+          stepForward={this.stepForward}
+          pauseClick={this.stopGame} />
         <Grid
           fullGrid={this.state.fullGrid}
           rows={this.rows}
@@ -109,7 +131,7 @@ class App extends Component {
           selectBox={this.clickHandler} />
       </div>
     )
-  }
-}
+  };
+};
 
 export default App;
