@@ -1,13 +1,13 @@
 # Application structure
 *App.js* contains all the game of life logic, and is in charge for rendering the main layout of the page. 
 
-##Components
+## Components
 *header/Header.js* contains all the game controls, and lifts up the game actions via props to the main app.js logic. <br>
 *box.js* is the visual representation of a cell in the grid.<br>
 *ui/button.js* is the visual representation of a button in the screen<br>
 *styledGrid.js* is the visual representation for the complete grid
 
-##Containers Components
+## Containers Components
 *Grid.js* is the 50x50 grid, with all the visual game. It recieves all the logic to show in the screen via props as if a row is alive or dead.
 
 
